@@ -27,8 +27,8 @@ class GameWords
     private int _littleWordsCount1;
     private int _littleWordsCount2;
 
-    public string playerName { get; set; }
-    public int littleWordsAmount { get; set; }
+    public string PlayerName { get; set; }
+    public int LittleWordsAmount { get; set; }
 
     private string? _word;
     private string? _littleWord;
@@ -43,7 +43,7 @@ class GameWords
         AppDomain.CurrentDomain.ProcessExit += (sender, e) =>
         {
             Print("Приложение завершает работу...");
-            
+
             gameWords.AddToListOfCurrentPlayers(gameWords._player1, gameWords._littleWordsCount1);
             gameWords.AddToListOfCurrentPlayers(gameWords._player2, gameWords._littleWordsCount2);
 
@@ -52,20 +52,20 @@ class GameWords
                 gameWords.PrintLoser();
                 gameWords.WriteIntoFile();
             }
-        };      
+        };
 
-            Print("Добро пожаловать в игру 'Слова'! Введите свои имена.\n");
-            gameWords.SetPlayer(1, out gameWords._player1);
-            gameWords.SetPlayer(2, out gameWords._player2);
+        Print("Добро пожаловать в игру 'Слова'! Введите свои имена.\n");
+        gameWords.SetPlayer(1, out gameWords._player1);
+        gameWords.SetPlayer(2, out gameWords._player2);
 
-            gameWords.ReadFromFile();
+        gameWords.ReadFromFile();
 
-            Print($"Первым ходит игрок {gameWords._player1}!\n");
+        Print($"Первым ходит игрок {gameWords._player1}!\n");
 
-            gameWords.SetWord();
+        gameWords.SetWord();
 
-            System.Timers.Timer timer = new(TimerInterval);
-            timer.Elapsed += Timer_Elapsed;
+        System.Timers.Timer timer = new(TimerInterval);
+        timer.Elapsed += Timer_Elapsed;
 
         while (!gameWords._loss)
         {
@@ -158,8 +158,8 @@ class GameWords
     {
         GameWords newPlayer = new GameWords
         {
-            playerName = playerName,
-            littleWordsAmount = littleWordsAmount,
+            PlayerName = playerName,
+            LittleWordsAmount = littleWordsAmount,
         };
         _listOfCurrentPlayers.Add(newPlayer);
     }
@@ -172,11 +172,11 @@ class GameWords
     private IEnumerable<GameWords> UpdateListOfAllPlayers()
     {
         IEnumerable<GameWords> resultList = _listOfAllPlayers.Concat(_listOfCurrentPlayers)
-            .GroupBy(n => n.playerName)
+            .GroupBy(n => n.PlayerName)
             .Select(p => new GameWords
             {
-                playerName = p.Key,
-                littleWordsAmount = p.Sum(a => a.littleWordsAmount)
+                PlayerName = p.Key,
+                LittleWordsAmount = p.Sum(a => a.LittleWordsAmount)
             });
         return resultList;
     }
@@ -341,9 +341,9 @@ class GameWords
         String str = String.Format("{0,-12} {1,-10}\n\n", "Имя игрока", "Счёт");
         foreach (GameWords player in _listOfAllPlayers)
         {
-            if (player.playerName.Equals(_player1) || player.playerName.Equals(_player2))
+            if (player.PlayerName.Equals(_player1) || player.PlayerName.Equals(_player2))
             {
-                str += String.Format("{0,-12} {1,-10}\n", player.playerName, player.littleWordsAmount);                
+                str += String.Format("{0,-12} {1,-10}\n", player.PlayerName, player.LittleWordsAmount);
             }
         }
         Print(str);
@@ -357,7 +357,7 @@ class GameWords
         String str = String.Format("{0,-12} {1,-10}\n\n", "Имя игрока", "Счёт");
         foreach (GameWords player in _listOfAllPlayers)
         {
-            str += String.Format("{0,-12} {1,-10}\n", player.playerName, player.littleWordsAmount);
+            str += String.Format("{0,-12} {1,-10}\n", player.PlayerName, player.LittleWordsAmount);
         }
         Print(str);
     }
